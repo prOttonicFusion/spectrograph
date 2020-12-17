@@ -5,9 +5,7 @@ import numpy as np
 from PIL import Image
 
 
-def main(video_path, aspect_ratio):
-    video_path = sys.argv[1]
-
+def analyze_movie(video_path, aspect_ratio):
     # Parse video frame-by-frame
     vidcap = cv2.VideoCapture(video_path)
     success, image = vidcap.read()
@@ -80,4 +78,4 @@ def rgbToHex(rgb_color):
 
 if __name__ == "__main__":
     args = parse_arguments()
-    main(*args)
+    analyze_movie(*args)
