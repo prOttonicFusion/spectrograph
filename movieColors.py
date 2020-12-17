@@ -6,6 +6,9 @@ from PIL import Image
 
 def main():
     video_path = sys.argv[1]
+    aspect_ratio = 16/4.0
+
+    # Parse video frame-by-frame
     vidcap = cv2.VideoCapture(video_path)
     success, image = vidcap.read()
     count = 0
@@ -15,7 +18,6 @@ def main():
         pil_img = Image.fromarray(img)
 
         # Crop frame to remove border
-        aspect_ratio = 16/4.0
         width, height = pil_img.size
         left = 0
         right = width
