@@ -5,12 +5,12 @@ import numpy as np
 from PIL import Image
 
 
-def analyze_movie(video_path, aspect_ratio, palette_size=32):
+def analyze_movie(video_path, aspect_ratio, palette_size=32, frames=-1):
     # Parse video frame-by-frame
     vidcap = cv2.VideoCapture(video_path)
     success, image = vidcap.read()
     count = 0
-    while success:
+    while success and frames == -1 or count < frames:
         # Convert to PIL image
         img = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         pil_img = Image.fromarray(img)
@@ -42,6 +42,8 @@ def parse_arguments():
                         help='specify the aspect ratio using the format 4:3 to crop out border, default: 0', default=0)
     parser.add_argument('--palette_size', '-p',
                         help='number of distinct colors in color space, default 32', type=int, default=32)
+    parser.add_argument('--frames', '-f',
+                        help='number of video frames to parse, with -1 being all, default: -1', type=int, default=-1)
     args = parser.parse_args()
 
     if isinstance(args.aspect_ratio, str):
@@ -51,7 +53,7 @@ def parse_arguments():
         except:
             raise(Exception('Unable to parse aspect ratio'))
 
-    return [args.video_path, args.aspect_ratio, args.palette_size]
+    return [args.video_path, args.aspect_ratio, args.palette_size, args.frames]
 
 
 def get_primary_color(source_img, palette_size):
