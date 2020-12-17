@@ -3,21 +3,13 @@ import cv2
 import numpy as np
 from PIL import Image
 
-# Read video file
-
-# Check need for color correction
-
-# Parse frames to PIL images
-
-# Extract primary color
-
 
 def main():
     video_path = sys.argv[1]
     vidcap = cv2.VideoCapture(video_path)
-    success,image = vidcap.read()
+    success, image = vidcap.read()
     count = 0
-    while success:  
+    while success:
         success, image = vidcap.read()
         img = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         pil_img = Image.fromarray(img)
