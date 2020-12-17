@@ -10,12 +10,27 @@ def main():
     success, image = vidcap.read()
     count = 0
     while success:
-        success, image = vidcap.read()
+        # Convert to PIL image
         img = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         pil_img = Image.fromarray(img)
 
+        # Crop frame to remove border
+        aspect_ratio = 16/4.0
+        width, height = pil_img.size
+        left = 0
+        right = width
+        content_height = 1/aspect_ratio * width
+        border = (height - content_height) * 0.5
+        top = border
+        bottom = border + content_height
+        pil_img = pil_img.crop((left, top, right, bottom))
+
+        # Get primary color
         main_color = get_primary_color(pil_img)
         print(rgbToHex(main_color))
+
+        # Attempt to read next frame
+        success, image = vidcap.read()
         count += 1
 
 
