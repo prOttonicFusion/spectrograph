@@ -39,5 +39,10 @@ def get_primary_color(source_img, palette_size=32):
     return primary_color
 
 
+def rgbToHex(rgb_color):
+    r, g, b = rgb_color
+    return '#{:02x}{:02x}{:02x}'.format(r, g, b)
+
+
 if __name__ == "__main__":
     main()
