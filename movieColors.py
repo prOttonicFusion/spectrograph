@@ -5,7 +5,7 @@ import numpy as np
 from PIL import Image
 
 
-def analyze_movie(video_path, aspect_ratio):
+def analyze_movie(video_path, aspect_ratio, palette_size=32):
     # Parse video frame-by-frame
     vidcap = cv2.VideoCapture(video_path)
     success, image = vidcap.read()
@@ -27,7 +27,7 @@ def analyze_movie(video_path, aspect_ratio):
             pil_img = pil_img.crop((left, top, right, bottom))
 
         # Get primary color
-        main_color = get_primary_color(pil_img)
+        main_color = get_primary_color(pil_img, palette_size)
         print(rgbToHex(main_color))
 
         # Attempt to read next frame
@@ -39,7 +39,9 @@ def parse_arguments():
     parser = argparse.ArgumentParser()
     parser.add_argument('video_path', help='path to the video file')
     parser.add_argument('--aspect_ratio', '-a',
-                        help="specify the aspect ratio using the format 4:3 to crop out border", default=0)
+                        help='specify the aspect ratio using the format 4:3 to crop out border, default: 0', default=0)
+    parser.add_argument('--palette_size', '-p',
+                        help='number of distinct colors in color space, default 32', type=int, default=32)
     args = parser.parse_args()
 
     if isinstance(args.aspect_ratio, str):
@@ -49,10 +51,10 @@ def parse_arguments():
         except:
             raise(Exception('Unable to parse aspect ratio'))
 
-    return [args.video_path, args.aspect_ratio]
+    return [args.video_path, args.aspect_ratio, args.palette_size]
 
 
-def get_primary_color(source_img, palette_size=32):
+def get_primary_color(source_img, palette_size):
     # Scale down image to conserve resources
     img = source_img.copy()
     img.thumbnail((100, 100))
