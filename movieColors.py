@@ -13,11 +13,18 @@ from PIL import Image
 
 
 def main():
-    img_path = sys.argv[1]
-    img = Image.open(img_path)
+    video_path = sys.argv[1]
+    vidcap = cv2.VideoCapture(video_path)
+    success,image = vidcap.read()
+    count = 0
+    while success:  
+        success, image = vidcap.read()
+        img = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        pil_img = Image.fromarray(img)
 
-    main_color = get_primary_color(img)
-    print('Dominant color: ', rgbToHex(main_color))
+        main_color = get_primary_color(pil_img)
+        print('Dominant color: ', rgbToHex(main_color))
+        count += 1
 
 
 def get_primary_color(source_img, palette_size=32):
