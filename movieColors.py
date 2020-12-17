@@ -1,12 +1,12 @@
 import sys
 import cv2
+import argparse
 import numpy as np
 from PIL import Image
 
 
-def main():
+def main(video_path, aspect_ratio):
     video_path = sys.argv[1]
-    aspect_ratio = 16/4.0
 
     # Parse video frame-by-frame
     vidcap = cv2.VideoCapture(video_path)
@@ -18,14 +18,15 @@ def main():
         pil_img = Image.fromarray(img)
 
         # Crop frame to remove border
-        width, height = pil_img.size
-        left = 0
-        right = width
-        content_height = 1/aspect_ratio * width
-        border = (height - content_height) * 0.5
-        top = border
-        bottom = border + content_height
-        pil_img = pil_img.crop((left, top, right, bottom))
+        if aspect_ratio != 0:
+            width, height = pil_img.size
+            left = 0
+            right = width
+            content_height = 1/aspect_ratio * width
+            border = (height - content_height) * 0.5
+            top = border
+            bottom = border + content_height
+            pil_img = pil_img.crop((left, top, right, bottom))
 
         # Get primary color
         main_color = get_primary_color(pil_img)
@@ -34,6 +35,23 @@ def main():
         # Attempt to read next frame
         success, image = vidcap.read()
         count += 1
+
+
+def parse_arguments():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('video_path', help='path to the video file')
+    parser.add_argument('--aspect_ratio', '-a',
+                        help="specify the aspect ratio using the format 4:3 to crop out border", default=0)
+    args = parser.parse_args()
+
+    if isinstance(args.aspect_ratio, str):
+        splitted = args.aspect_ratio.split(':')
+        try:
+            args.aspect_ratio = float(splitted[0])/float(splitted[1])
+        except:
+            raise(Exception('Unable to parse aspect ratio'))
+
+    return [args.video_path, args.aspect_ratio]
 
 
 def get_primary_color(source_img, palette_size=32):
@@ -61,4 +79,5 @@ def rgbToHex(rgb_color):
 
 
 if __name__ == "__main__":
-    main()
+    args = parse_arguments()
+    main(*args)
