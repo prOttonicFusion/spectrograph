@@ -5,7 +5,7 @@ import numpy as np
 from PIL import Image
 
 
-def analyze_movie(video_path, aspect_ratio, palette_size=32, frames=-1):
+def analyze_movie(video_path, aspect_ratio, palette_size=32, frames=-1, show_frames=False):
     # Parse video frame-by-frame
     vidcap = cv2.VideoCapture(video_path)
     success, image = vidcap.read()
@@ -27,7 +27,8 @@ def analyze_movie(video_path, aspect_ratio, palette_size=32, frames=-1):
             pil_img = pil_img.crop((left, top, right, bottom))
 
         # Get primary color
-        main_color = get_primary_color(pil_img, palette_size)
+        main_color = get_primary_color(
+            pil_img, palette_size, show_img=show_frames)
         print(rgbToHex(main_color))
 
         # Attempt to read next frame
@@ -44,6 +45,8 @@ def parse_arguments():
                         help='number of distinct colors in color space, default 32', type=int, default=32)
     parser.add_argument('--frames', '-f',
                         help='number of video frames to parse, with -1 being all, default: -1', type=int, default=-1)
+    parser.add_argument('--show_frames',
+                        help='show each processed frame for debugging purposes', action='store_true', default=False)
     args = parser.parse_args()
 
     if isinstance(args.aspect_ratio, str):
@@ -53,16 +56,21 @@ def parse_arguments():
         except:
             raise(Exception('Unable to parse aspect ratio'))
 
-    return [args.video_path, args.aspect_ratio, args.palette_size, args.frames]
+    if args.show_frames and args.frames == -1:
+        input("Warning: This will open each video frame in a new window. To continue, press enter")
+
+    return [args.video_path, args.aspect_ratio, args.palette_size, args.frames, args.show_frames]
 
 
-def get_primary_color(source_img, palette_size):
+def get_primary_color(source_img, palette_size, show_img=False):
     # Scale down image to conserve resources
     img = source_img.copy()
     img.thumbnail((100, 100))
 
     # Reduce color palette (using k-means)
     img_reduced = img.convert('P', palette=Image.ADAPTIVE, colors=palette_size)
+    if show_img:
+        img_reduced.show()
 
     # Get list of colors in image
     palette = img_reduced.getpalette()
