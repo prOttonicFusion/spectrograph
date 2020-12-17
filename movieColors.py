@@ -10,3 +10,13 @@ from PIL import Image
 # Parse frames to PIL images
 
 # Extract primary color
+
+def main():
+    img_path = sys.argv[1]
+    img = Image.open(img_path)
+
+    main_color = get_primary_color(img)
+    print('Dominant color: ', rgbToHex(main_color))
+
+if __name__ == "__main__":
+    main()
