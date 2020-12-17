@@ -15,7 +15,7 @@ def main():
         pil_img = Image.fromarray(img)
 
         main_color = get_primary_color(pil_img)
-        print('Dominant color: ', rgbToHex(main_color))
+        print(rgbToHex(main_color))
         count += 1
 
 
