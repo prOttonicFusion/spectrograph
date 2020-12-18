@@ -5,7 +5,27 @@ import numpy as np
 from PIL import Image
 
 
-def analyze_movie(video_path, aspect_ratio, palette_size=32, frames=-1, step=1, show_frames=False, show_last_frame=False):
+def analyze_movie(video_path, aspect_ratio=0, palette_size=32, frames=-1, step=1, show_frames=False, show_last_frame=False):
+    """Parses and prints out the primary color of every STEPth video frame
+
+    Parameters
+    ----------
+    video_path : str
+        The path to the video file
+    aspect_ratio : float, optional
+        The aspect ratio used for cropping a video with vertical borders
+    palette_size: int, optional
+        Number of distinct colors in color space (Default: 32)
+    frames: int, optional
+        Number of frames to parse, with -1 meaning all frames (Default: -1)
+    step: int, optional
+        The step size between frames (Default: 1)
+    show_frames: bool, optional
+        Show each processed frame for debugging purposes (Default: False)
+    show_last_frame: bool, optional
+        Show last frame for debugging purposes (Default: False)
+    """
+
     # Parse video frame-by-frame
     vidcap = cv2.VideoCapture(video_path)
     success, image = vidcap.read()
@@ -36,7 +56,7 @@ def analyze_movie(video_path, aspect_ratio, palette_size=32, frames=-1, step=1, 
         # Attempt to read next frame
         success, image = vidcap.read()
         count += 1
-    
+
     if show_last_frame:
         pil_img.show()
 
@@ -72,6 +92,24 @@ def parse_arguments():
 
 
 def get_primary_color(source_img, palette_size, show_img=False):
+    """Get the primary color of an image by scaling it down and reducing
+       the color palette
+
+    Parameters
+    ----------
+    source_img : Image
+        The PIL image to use as source
+    palette_size: int
+        The number of distinct colors to reduce the image color palette to
+    show_img: bool, optional
+        Sets whether the modified image should be displayed
+
+    Returns
+    ----------
+    primary_color : tuple
+        A RGB tuple describing the frame's most common color
+    """
+
     # Scale down image to conserve resources
     img = source_img.copy()
     img.thumbnail((100, 100))
@@ -93,6 +131,7 @@ def get_primary_color(source_img, palette_size, show_img=False):
 
 
 def rgbToHex(rgb_color):
+    """Converts a RGB tuple to a hex color string"""
     r, g, b = rgb_color
     return '#{:02x}{:02x}{:02x}'.format(r, g, b)
 
