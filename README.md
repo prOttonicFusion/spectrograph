@@ -2,7 +2,6 @@
 Visualize video files as spectrums consisting of the primary colors of each frame
 
 ## Prerequisites
-Video analysis script:
 - Python 3
 - [Numpy](https://numpy.org/)
 - [Pillow](https://pillow.readthedocs.io/)
