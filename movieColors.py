@@ -5,32 +5,33 @@ import numpy as np
 from PIL import Image
 
 
-def analyze_movie(video_path, aspect_ratio, palette_size=32, frames=-1, show_frames=False, show_last_frame=False):
+def analyze_movie(video_path, aspect_ratio, palette_size=32, frames=-1, step=1, show_frames=False, show_last_frame=False):
     # Parse video frame-by-frame
     vidcap = cv2.VideoCapture(video_path)
     success, image = vidcap.read()
     pil_img = None
     count = 0
     while success and frames == -1 or count < frames:
-        # Convert to PIL image
-        img = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-        pil_img = Image.fromarray(img)
+        if count % step == 0:
+            # Convert to PIL image
+            img = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+            pil_img = Image.fromarray(img)
 
-        # Crop frame to remove border
-        if aspect_ratio != 0:
-            width, height = pil_img.size
-            left = 0
-            right = width
-            content_height = 1/aspect_ratio * width
-            border = (height - content_height) * 0.5
-            top = border
-            bottom = border + content_height
-            pil_img = pil_img.crop((left, top, right, bottom))
+            # Crop frame to remove border
+            if aspect_ratio != 0:
+                width, height = pil_img.size
+                left = 0
+                right = width
+                content_height = 1/aspect_ratio * width
+                border = (height - content_height) * 0.5
+                top = border
+                bottom = border + content_height
+                pil_img = pil_img.crop((left, top, right, bottom))
 
-        # Get primary color
-        main_color = get_primary_color(
-            pil_img, palette_size, show_img=show_frames)
-        print(rgbToHex(main_color))
+            # Get primary color
+            main_color = get_primary_color(
+                pil_img, palette_size, show_img=show_frames)
+            print(rgbToHex(main_color))
 
         # Attempt to read next frame
         success, image = vidcap.read()
@@ -49,6 +50,8 @@ def parse_arguments():
                         help='number of distinct colors in color space, default 32', type=int, default=32)
     parser.add_argument('--frames', '-f',
                         help='number of video frames to parse, with -1 being all, default: -1', type=int, default=-1)
+    parser.add_argument('--step', '-s',
+                        help='step size, i.e. parse every STEPth frames, default: 1', type=int, default=1)
     parser.add_argument('--show_frames',
                         help='show each processed frame for debugging purposes', action='store_true', default=False)
     parser.add_argument('--show_last_frame',
@@ -65,7 +68,7 @@ def parse_arguments():
     if args.show_frames and args.frames == -1:
         input("Warning: This will open each video frame in a new window. To continue, press enter")
 
-    return [args.video_path, args.aspect_ratio, args.palette_size, args.frames, args.show_frames, args.show_last_frame]
+    return [args.video_path, args.aspect_ratio, args.palette_size, args.frames, args.step, args.show_frames, args.show_last_frame]
 
 
 def get_primary_color(source_img, palette_size, show_img=False):
