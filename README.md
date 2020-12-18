@@ -1,5 +1,5 @@
-# movie-colors
-Extract the primary color of each frame in a video file
+# Movie Spectrograph
+Visualize video files as spectrums consisting of the primary colors of each frame
 
 ## Prerequisites
 Video analysis script:
@@ -10,16 +10,16 @@ Video analysis script:
 - [Bokeh](https://bokeh.org/) (used only by the visualization tools)
 
 ## Usage
-Simple! Just run it as
+To extract the most used colors of each fram, simply run
 ```
-python3 movieColors.py <path-to-video-file>
+python3 spectrograph.py <path-to-video-file>
 ```
-By default, the primary color codes are outputted to the standard output as hex codes. The output can be piped to a file e.g. as
+By default, the color codes are outputted to the standard output as hex codes. The output can be piped to a file e.g. as
 ```
-python3 movieColors.py video.mp4 > frame-colors.dat
+python3 spectrograph.py video.mp4 > frame-colors.dat
 ```
 
-The output of the analysis script can be visualized using the provided `colorsBarChart.py` script:
+The output of the analysis script can then be visualized using the provided `linearSpectrum.py` script:
 ```
-python3 colorsBarChart.py frame-colors.dat
+python3 linearSpectrum.py frame-colors.dat
 ```
