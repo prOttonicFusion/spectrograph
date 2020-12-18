@@ -5,10 +5,11 @@ import numpy as np
 from PIL import Image
 
 
-def analyze_movie(video_path, aspect_ratio, palette_size=32, frames=-1, show_frames=False):
+def analyze_movie(video_path, aspect_ratio, palette_size=32, frames=-1, show_frames=False, show_last_frame=False):
     # Parse video frame-by-frame
     vidcap = cv2.VideoCapture(video_path)
     success, image = vidcap.read()
+    pil_img = None
     count = 0
     while success and frames == -1 or count < frames:
         # Convert to PIL image
@@ -34,6 +35,9 @@ def analyze_movie(video_path, aspect_ratio, palette_size=32, frames=-1, show_fra
         # Attempt to read next frame
         success, image = vidcap.read()
         count += 1
+    
+    if show_last_frame:
+        pil_img.show()
 
 
 def parse_arguments():
@@ -47,6 +51,8 @@ def parse_arguments():
                         help='number of video frames to parse, with -1 being all, default: -1', type=int, default=-1)
     parser.add_argument('--show_frames',
                         help='show each processed frame for debugging purposes', action='store_true', default=False)
+    parser.add_argument('--show_last_frame',
+                        help='show last frame for debugging purposes', action='store_true', default=False)
     args = parser.parse_args()
 
     if isinstance(args.aspect_ratio, str):
@@ -59,7 +65,7 @@ def parse_arguments():
     if args.show_frames and args.frames == -1:
         input("Warning: This will open each video frame in a new window. To continue, press enter")
 
-    return [args.video_path, args.aspect_ratio, args.palette_size, args.frames, args.show_frames]
+    return [args.video_path, args.aspect_ratio, args.palette_size, args.frames, args.show_frames, args.show_last_frame]
 
 
 def get_primary_color(source_img, palette_size, show_img=False):
