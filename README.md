@@ -1,4 +1,4 @@
-# Movie Spectrograph
+# Spectrograph
 Visualize video files as spectrums consisting of the primary colors of each frame
 
 ![Sample 1](https://github.com/prOttonicFusion/spectrograph/blob/main/samples/LoTR_Fellowship-of-the-Ring.png)
