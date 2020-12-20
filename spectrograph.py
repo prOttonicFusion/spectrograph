@@ -5,7 +5,9 @@ import numpy as np
 from PIL import Image
 
 
-def analyze_movie(video_path, aspect_ratio=0, palette_size=32, frames=-1, step=1, show_frames=False, show_last_frame=False):
+def analyze_movie(
+        video_path, aspect_ratio=0, palette_size=32, frames=-1, step=1, show_frames=False, show_last_frame=False, color_format='hex'
+):
     """Parses and prints out the primary color of every STEPth video frame
 
     Parameters
@@ -24,6 +26,8 @@ def analyze_movie(video_path, aspect_ratio=0, palette_size=32, frames=-1, step=1
         Show each processed frame for debugging purposes (Default: False)
     show_last_frame: bool, optional
         Show last frame for debugging purposes (Default: False)
+    color_format: 'hex' or 'rgb'
+        Specify the output color format (Default: hex)
     """
 
     # Parse video frame-by-frame
@@ -51,7 +55,11 @@ def analyze_movie(video_path, aspect_ratio=0, palette_size=32, frames=-1, step=1
             # Get primary color
             main_color = get_primary_color(
                 pil_img, palette_size, show_img=show_frames)
-            print(rgbToHex(main_color))
+
+            if color_format == 'hex':
+                main_color = rgbToHex(main_color)
+                
+            print(main_color)
 
         # Attempt to read next frame
         success, image = vidcap.read()
@@ -76,6 +84,8 @@ def parse_arguments():
                         help='show each processed frame for debugging purposes', action='store_true', default=False)
     parser.add_argument('--show_last_frame',
                         help='show last frame for debugging purposes', action='store_true', default=False)
+    parser.add_argument('--color_format',
+                        help='specify the color format as hex or rgb, default: hex', default='hex')
     args = parser.parse_args()
 
     if isinstance(args.aspect_ratio, str):
@@ -88,7 +98,14 @@ def parse_arguments():
     if args.show_frames and args.frames == -1:
         input("Warning: This will open each video frame in a new window. To continue, press enter")
 
-    return [args.video_path, args.aspect_ratio, args.palette_size, args.frames, args.step, args.show_frames, args.show_last_frame]
+    return [args.video_path,
+            args.aspect_ratio,
+            args.palette_size,
+            args.frames,
+            args.step,
+            args.show_frames,
+            args.show_last_frame,
+            args.color_format]
 
 
 def get_primary_color(source_img, palette_size, show_img=False):
