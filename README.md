@@ -1,5 +1,5 @@
 # Spectrograph
-Visualize video files as spectrums consisting of the primary colors of each frame
+Visualize movies and other videos as color spectrums based on the primary colors of each frame
 
 ![Sample 1](https://github.com/prOttonicFusion/spectrograph/blob/main/samples/LoTR_Fellowship-of-the-Ring.png)
 ![Sample 2](https://github.com/prOttonicFusion/spectrograph/blob/main/samples/Star-Wars_A_New_Hope.png)
