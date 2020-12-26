@@ -9,14 +9,14 @@ Visualize movies and other videos as color spectrums based on the primary colors
 - [Numpy](https://numpy.org/)
 - [Pillow](https://pillow.readthedocs.io/)
 - [OpenCV for Python](https://pypi.org/project/opencv-python/)
-- [Bokeh](https://bokeh.org/) (used only by the visualization tools)
+- [Bokeh](https://bokeh.org/) (optional, used for visualization only)
 
 ## Usage
-To extract the most used colors of each fram, simply run
+To extract the color data into a file, simply run
 ```
-python3 spectrograph.py <path-to-video-file>
+python3 spectrograph.py <video-file> > <output-file>
 ```
-By default, the color codes are outputted to the standard output as hex codes. The output can be piped to a file e.g. as
+e.g.
 ```
 python3 spectrograph.py video.mp4 > frame-colors.dat
 ```
@@ -25,3 +25,4 @@ The output of the analysis script can then be visualized using the provided `lin
 ```
 python3 linearSpectrum.py frame-colors.dat
 ```
+Both scripts can be run using the `-h` flag to get a complete list of available commands and options.
