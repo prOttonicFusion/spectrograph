@@ -4,12 +4,12 @@ Visualize movies and other videos as color spectrums based on the primary colors
 ![Sample 1](https://github.com/prOttonicFusion/spectrograph/blob/main/samples/LoTR_Fellowship-of-the-Ring.png)
 ![Sample 2](https://github.com/prOttonicFusion/spectrograph/blob/main/samples/Star-Wars_A_New_Hope.png)
 
-## Prerequisites
-- Python 3
-- [Numpy](https://numpy.org/)
-- [Pillow](https://pillow.readthedocs.io/)
-- [OpenCV for Python](https://pypi.org/project/opencv-python/)
-- [Bokeh](https://bokeh.org/) (optional, used for visualization only)
+## Installation
+```
+git clone git@github.com:prOttonicFusion/spectrograph.git
+cd spectrograph
+pip3 install -r requirements.txt
+```
 
 ## Usage
 To extract the color data into a file, simply run
