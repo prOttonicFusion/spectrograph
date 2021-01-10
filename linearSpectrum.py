@@ -1,3 +1,11 @@
+"""
+Plot a spectrum from a data file of color codes
+"""
+
+__author__ = "prOttonicFusion"
+__version__ = "0.1.0"
+__license__ = "MIT"
+
 import numpy as np
 import argparse
 from math import pi

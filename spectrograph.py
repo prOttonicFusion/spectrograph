@@ -1,3 +1,11 @@
+"""
+Extract the primary colors from each frame of a video file
+"""
+
+__author__ = "prOttonicFusion"
+__version__ = "0.1.0"
+__license__ = "MIT"
+
 import sys
 import cv2
 import argparse
