@@ -18,7 +18,7 @@ def main(color_data_file, html='', png='', title='', show_axes=False, show_grid=
     data_range = len(colors)
     data = list(range(0, data_range))
 
-    fig = figure(plot_height=250, title=title,
+    fig = figure(height=250, title=title,
                  toolbar_location=None, tools='')
 
     fig.vbar(x=data, top=1, width=0.9, color=colors)

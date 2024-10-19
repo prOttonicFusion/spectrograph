@@ -1,4 +1,4 @@
-numpy
-pillow
-opencv-python
-bokeh
+numpy==2.1.*
+pillow==11.0.*
+opencv-python==4.10.0.84
+bokeh==3.6.*
